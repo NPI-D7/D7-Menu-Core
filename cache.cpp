@@ -46,7 +46,7 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
         RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Data: " + section, zz, cachedata.size(), RenderD7::Color::Hex("#00DD11"));
         zz++;
     }
-    for(unsigned i = 1; i < secs.size(); i++)
+    for(unsigned i = 0; i < secs.size(); i++)
     {
         auto newData = std::make_shared<Title>();
         
