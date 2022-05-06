@@ -10,6 +10,25 @@
 
 Log cachelog;
 
+static const size_t ENTRYSIZE = 5341;
+
+static C2D_Image loadIconTex(u16* icndata){
+    C3D_Tex* tex                          = new C3D_Tex;
+	static const Tex3DS_SubTexture subt3x = {48, 48, 0.0f, 48 / 64.0f, 48 / 64.0f, 0.0f};
+	C3D_TexInit(tex, 64, 64, GPU_RGB565);
+	
+	u16* dest = (u16*)tex->data + (64 - 48) * 64;
+	u16* src  = (u16*)icndata;
+	for (int j = 0; j < 48; j += 8)
+	{
+		std::copy(src, src + 48 * 8, dest);
+		src += 48 * 8;
+		dest += 64 * 8;
+	}
+	
+	return C2D_Image{tex, &subt3x};
+}
+
 void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& path)
 {
     remove(path.c_str());
@@ -22,6 +41,7 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& pat
         cachedata[t[i]->name()]["author"] = t[i]->author();
         cachedata[t[i]->name()]["prod"] = t[i]->prodcode();
         cachedata[t[i]->name()]["id"] = std::to_string(t[i]->ID());
+        
     }
     cache.write(cachedata);
 }
@@ -29,6 +49,7 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& pat
 bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path, bool nand)
 {
     int zz = 0;
+    std::fstream binary_file("sdmc:/data", std::ios::in|std::ios::binary);
     RenderD7::Msg::Display("D7-Menu-Core", "Look for exisring cache...", Top);
     if (!RenderD7::FS::FileExist(path))
     {
@@ -49,6 +70,8 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
     for(unsigned i = 0; i < secs.size(); i++)
     {
         auto newData = std::make_shared<Title>();
+
+        
         
         std::string title = cachedata[secs[i]]["name"];
 
