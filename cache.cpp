@@ -67,6 +67,23 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
         RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Data: " + section, zz, cachedata.size(), RenderD7::Color::Hex("#00DD11"));
         zz++;
     }
+    //Check for Changes
+    amInit();
+    Result res = 0;
+    u32 count__ = 0;
+    int titlecount__ = 0;
+    res = AM_GetTitleCount(nand ? MEDIATYPE_NAND : MEDIATYPE_SD, &count__);
+	if (R_FAILED(res))
+	{
+		return false;
+	}
+	titlecount__ = (int)count__;
+
+    if ((int)secs.size() != titlecount__)
+    {
+        return false;
+    }
+    
     for(unsigned i = 0; i < secs.size(); i++)
     {
         auto newData = std::make_shared<Title>();
