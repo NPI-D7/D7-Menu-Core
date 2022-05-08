@@ -104,7 +104,7 @@ void TitleManager::ScanCard(void){
 	{
 		return;
 	}
-
+	D7TM::CardLoop();
 	if (CardStatus == "NotInserted")
 	{
 		return;
