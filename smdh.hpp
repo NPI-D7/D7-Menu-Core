@@ -1,7 +1,8 @@
 #ifndef SMDH_HPP
 #define SMDH_HPP
-
+#include <string>
 #include <3ds.h>
+#include "utils.hpp"
 
 typedef struct
 {
@@ -40,5 +41,6 @@ typedef struct
 } smdh_s;
 
 smdh_s* loadSMDH(u32 low, u32 high, u8 media);
+smdh_s* LoadSMDHFile(std::string path);
 
 #endif

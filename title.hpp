@@ -17,7 +17,7 @@ class Title {
     Title(void) = default;
     ~Title(void);
    
-    bool LoadFromCache(const uint64_t& _id, std::string _title, std::string _author, std::string code, const uint8_t& mt);
+    bool LoadFromCache(const uint64_t& _id, std::string _title, std::string _author, const uint8_t& mt);
     bool load(u64 id, FS_MediaType mediatype);
     u32 highid(void);
     u32 lowid(void);
@@ -25,7 +25,6 @@ class Title {
     FS_MediaType mediatype(void);
     std::string name(void);
     std::string author(void);
-    std::string prodcode(void) { return m_prodCode; }
     C2D_Image icon(void);
     C3D_Tex m_3Icon;
     u16 *ibuf;
@@ -36,5 +35,4 @@ class Title {
     C2D_Image m_Icon;
     std::string m_Name;
     std::string m_Author;
-    std::string m_prodCode;
 };

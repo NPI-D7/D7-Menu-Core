@@ -76,14 +76,13 @@ Title::~Title(void){
     }
 }
 
-bool Title::LoadFromCache(const uint64_t& _id, std::string _title, std::string _author, std::string code, const uint8_t& mt)
+bool Title::LoadFromCache(const uint64_t& _id, std::string _title, std::string _author, const uint8_t& mt)
 {
 	cachelog.Write("Loading Title: " + _id);
     m_id = _id;
     m_Media = (FS_MediaType)mt;
     m_Name = _title;
 	m_Author = _author;
-    m_prodCode = code;
 	cachelog.Write(std::to_string(m_id));
 	cachelog.Write(m_Name + std::to_string((u32)(m_id)) + std::to_string((u32)(m_id >> 32)));
 	smdh_s* smdh = loadSMDH(lowid(), highid(), m_Media);
@@ -96,7 +95,8 @@ bool Title::LoadFromCache(const uint64_t& _id, std::string _title, std::string _
 }
 
 bool Title::load(u64 id, FS_MediaType media) {
-    bool titleload = false;
+	bool titleload = false;
+	
 	cachelog.Write("Loading Title: " + id);
     m_id = id;
     m_Media = media;
@@ -105,9 +105,6 @@ bool Title::load(u64 id, FS_MediaType media) {
     if (smdh == NULL){
         return false;
     }
-	char tmp[16];
-    AM_GetTitleProductCode(media, id, tmp);
-	m_prodCode = tmp;
     m_Name   = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].shortDescription);
 	m_Author = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].publisher);
 	titleload = true;

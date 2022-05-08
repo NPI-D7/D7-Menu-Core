@@ -91,6 +91,48 @@ void TitleManager::ScanSD(const std::string &appmaindir)
 	
 }
 
+void TitleManager::ScanCard(void){
+	amInit();
+	Result res	= 0;
+	u32 count	= 0;
+
+	// clear title list if filled previously
+	gamecard.clear();
+
+	res = AM_GetTitleCount(MEDIATYPE_GAME_CARD, &count);
+	if (R_FAILED(res))
+	{
+		return;
+	}
+
+	if (CardStatus == "NotInserted")
+	{
+		return;
+	}
+
+	// get title list and check if a title matches the ids we want
+	std::vector<u64> ids(count);
+	u64* p	= ids.data();
+	res		= AM_GetTitleList(NULL, MEDIATYPE_GAME_CARD, count, p);
+	if (R_FAILED(res))
+	{
+		return;
+	}
+
+	for (u32 i = 0; i < count; i++) {
+		
+			auto title = std::make_shared<Title>();
+			if (title->load(ids[i], MEDIATYPE_GAME_CARD))
+			{
+				gamecard.push_back(title);
+			}
+		
+	}
+	// sort the list alphabetically
+	std::sort(gamecard.begin(), gamecard.end(), [](std::shared_ptr<Title>& l, std::shared_ptr<Title>& r) { return l->ID() < r->ID(); });
+	sdtitles.insert(sdtitles.begin(), gamecard[0]);
+ }
+
 void TitleManager::ScanNand(const std::string &appmaindir)
 {
 	amInit();
