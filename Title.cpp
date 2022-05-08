@@ -152,3 +152,25 @@ std::string Title::author(void)
 {
 	return m_Author;
 }
+
+std::string Title::MediaTP(void)
+{
+	std::string mt_ = "Unknown";
+
+	switch (this->m_Media)
+	{
+	case MEDIATYPE_SD:
+		return "SD";
+		break;
+	case MEDIATYPE_NAND:
+		return "NAND";
+		break;
+	case MEDIATYPE_GAME_CARD:
+		return "Game Card";
+		break;
+	default:
+		return "Unknown";
+		break;
+	}
+	return mt_;
+}

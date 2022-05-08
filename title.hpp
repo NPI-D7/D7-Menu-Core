@@ -23,6 +23,7 @@ class Title {
     u32 lowid(void);
     u64 ID(void);
     FS_MediaType mediatype(void);
+    std::string MediaTP(void);
     std::string name(void);
     std::string author(void);
     C2D_Image icon(void);
