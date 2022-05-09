@@ -10,6 +10,7 @@ namespace D7TM
 {
     bool checkCardSlot();
     void CardLoop();
+    void IconLoading(bool do_);
 }
 
 class Title {

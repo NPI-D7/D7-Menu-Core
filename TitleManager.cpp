@@ -84,7 +84,7 @@ void TitleManager::ScanSD(const std::string &appmaindir)
 		}
 		std::sort(sdtitles.begin(), sdtitles.end(), [](std::shared_ptr<Title>& l, std::shared_ptr<Title>& r) { return l->name() < r->name(); });
 		RenderD7::Msg::Display("D7-Menu-Core", "Creating cache", Top);
-		Cache::Create(sdtitles, appmaindir + "cache/sd");
+		Cache::Create(sdtitles, appmaindir + "cache/sd", (int)count);
 	}
 
 		
@@ -176,6 +176,6 @@ void TitleManager::ScanNand(const std::string &appmaindir)
 		}
 		std::sort(nandtitles.begin(), nandtitles.end(), [](std::shared_ptr<Title>& l, std::shared_ptr<Title>& r) { return l->name() < r->name(); });
 		RenderD7::Msg::Display("D7-Menu-Core", "Creating cache", Top);
-		Cache::Create(nandtitles, appmaindir + "cache/nand");
+		Cache::Create(nandtitles, appmaindir + "cache/nand", (int)count);
 	}
 }

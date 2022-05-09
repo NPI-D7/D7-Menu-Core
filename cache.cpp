@@ -29,11 +29,16 @@ static C2D_Image loadIconTex(u16* icndata){
 	return C2D_Image{tex, &subt3x};
 }
 
-void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& path)
+void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& path, int countall)
 {
+    std::string path2 = path + ".count";
     remove(path.c_str());
+    remove(path2.c_str());
     INI::INIFile cache(path);
+    INI::INIFile cachecount(path2);
     INI::INIStructure cachedata;
+    INI::INIStructure cachedatacount;
+    cachedatacount["count"]["cnt"] = std::to_string(countall);
     for(unsigned i = 0; i < t.size(); i++)
     {
         RenderD7::Msg::DisplayWithProgress("D7-Menu-Core", "Writing Cache: " + t[i]->name(), i, (int)t.size(), RenderD7::Color::Hex("#00DD11"));
@@ -43,12 +48,13 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& pat
         
     }
     cache.write(cachedata);
+    cachecount.write(cachedatacount);
 }
 
 bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path, bool nand)
 {
+    std::string path2 = path + ".count";
     int zz = 0;
-    std::fstream binary_file("sdmc:/data", std::ios::in|std::ios::binary);
     RenderD7::Msg::Display("D7-Menu-Core", "Look for exisring cache...", Top);
     if (!RenderD7::FS::FileExist(path))
     {
@@ -57,8 +63,11 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
     std::vector<std::string> secs;
     RenderD7::Msg::Display("D7-Menu-Core",  "Loading Titles from cache...", Top);
     INI::INIFile cache(path);
+    INI::INIFile cachecount(path2);
     INI::INIStructure cachedata;
+    INI::INIStructure cachedatacount;
     cache.read(cachedata);
+    cachecount.read(cachedatacount);
     for (auto const& it : cachedata)
     {
 	    auto const& section = it.first;
@@ -78,7 +87,7 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
 	}
 	titlecount__ = (int)count__;
 
-    if ((int)secs.size() != titlecount__)
+    if (std::atoi(cachedatacount["count"]["cnt"].c_str()) != titlecount__)
     {
         return false;
     }

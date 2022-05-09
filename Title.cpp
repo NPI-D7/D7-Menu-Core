@@ -8,6 +8,12 @@ std::string CardTypeStatus = "None";
 extern Log cachelog;
 bool checked = false;
 FS_CardType type;
+bool loadicon = true;
+
+void D7TM::IconLoading(bool do_)
+{
+	loadicon = do_;
+}
 
 bool D7TM::checkCardSlot()
 {
@@ -85,12 +91,16 @@ bool Title::LoadFromCache(const uint64_t& _id, std::string _title, std::string _
 	m_Author = _author;
 	cachelog.Write(std::to_string(m_id));
 	cachelog.Write(m_Name + std::to_string((u32)(m_id)) + std::to_string((u32)(m_id >> 32)));
-	smdh_s* smdh = loadSMDH(lowid(), highid(), m_Media);
-	if (smdh == NULL){
-    	return false;
+	if (loadicon)
+	{
+		smdh_s* smdh = loadSMDH(lowid(), highid(), m_Media);
+		if (smdh == NULL){
+    		return false;
+		}
+		m_Icon     = loadIconTex(smdh);
+		delete smdh;
 	}
-	m_Icon     = loadIconTex(smdh);
-	delete smdh;
+	
     return true;
 }
 
@@ -108,7 +118,7 @@ bool Title::load(u64 id, FS_MediaType media) {
     m_Name   = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].shortDescription);
 	m_Author = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].publisher);
 	titleload = true;
-	m_Icon     = loadIconTex(smdh);
+	if (loadicon) m_Icon     = loadIconTex(smdh);
 	//m_3Icon = GetIcon(smdh);
 	//ibuf = smdh->bigIconData;
 	delete smdh;
