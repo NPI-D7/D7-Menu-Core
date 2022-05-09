@@ -31,23 +31,12 @@ smdh_s* loadSMDH(u32 low, u32 high, u8 media)
 
 smdh_s* LoadSMDHFile(std::string path)
 {
-	//Handle fileHandle;
-
-	smdh_s* smdh = new smdh_s;
-	Result res = 0;
-
-	
-	
-	if (R_SUCCEEDED(res))
-	{
-		//u32 read;
-		//FSFILE_Read(fileHandle, &read, 0, smdh, sizeof(smdh_s));
-	}
-	else
-	{
-		delete smdh;
-		smdh = NULL;
-	}
-	//FSFILE_Close(fileHandle);
-	return smdh;
+	FILE* f = fopen(path.c_str(), "rb");
+    if (f != NULL) {
+        smdh_s* smdh = new smdh_s;
+        fread(smdh, 1, sizeof(smdh_s), f);
+        fclose(f);
+        return smdh;
+    }
+    return NULL;
 }

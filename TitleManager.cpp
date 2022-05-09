@@ -109,6 +109,11 @@ void TitleManager::ScanCard(void){
 	{
 		return;
 	}
+	if (CardTypeStatus == "TWL")
+	{
+		return;
+	}
+	
 
 	// get title list and check if a title matches the ids we want
 	std::vector<u64> ids(count);
