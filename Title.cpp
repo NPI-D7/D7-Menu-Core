@@ -15,6 +15,20 @@ void D7TM::IconLoading(bool do_)
 	loadicon = do_;
 }
 
+static bool IsValidName(std::string name)
+{
+	if (name == "???") {
+		return false;
+	}
+
+	else if (name == "") 
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool D7TM::checkCardSlot()
 {
 	bool isinsert;
@@ -116,6 +130,13 @@ bool Title::load(u64 id, FS_MediaType media) {
         return false;
     }
     m_Name   = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].shortDescription);
+	if (!IsValidName(m_Name))
+	{
+		delete smdh;
+		return false;
+		
+	}
+	
 	m_Author = UTF16toUTF8((char16_t*)smdh->applicationTitles[1].publisher);
 	titleload = true;
 	if (loadicon) m_Icon     = loadIconTex(smdh);
