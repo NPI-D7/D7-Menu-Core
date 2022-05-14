@@ -42,9 +42,9 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& pat
     for(unsigned i = 0; i < t.size(); i++)
     {
         RenderD7::Msg::DisplayWithProgress("D7-Menu-Core", "Writing Cache: " + t[i]->name(), i, (int)t.size(), RenderD7::Color::Hex("#00DD11"));
-        cachedata[t[i]->name()]["name"] = t[i]->name();
-        cachedata[t[i]->name()]["author"] = t[i]->author();
-        cachedata[t[i]->name()]["id"] = std::to_string(t[i]->ID());
+        cachedata[std::to_string(t[i]->ID())]["name"] = t[i]->name();
+        cachedata[std::to_string(t[i]->ID())]["author"] = t[i]->author();
+        cachedata[std::to_string(t[i]->ID())]["id"] = std::to_string(t[i]->ID());
         
     }
     cache.write(cachedata);
@@ -68,13 +68,6 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
     INI::INIStructure cachedatacount;
     cache.read(cachedata);
     cachecount.read(cachedatacount);
-    for (auto const& it : cachedata)
-    {
-	    auto const& section = it.first;
-        secs.push_back(section);
-        RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Data: " + section, zz, cachedata.size(), RenderD7::Color::Hex("#00DD11"));
-        zz++;
-    }
     //Check for Changes
     amInit();
     Result res = 0;
@@ -91,8 +84,29 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
     {
         return false;
     }
+
+    for (auto const& it : cachedata)
+    {
+	    auto const& section = it.first;
+        secs.push_back(section);
+        RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Data: " + section, zz, cachedata.size(), RenderD7::Color::Hex("#00DD11"));
+
+        auto newData = std::make_shared<Title>();
+
+        std::string title = cachedata[section]["name"];
+        
+        std::string __author__ = cachedata[section]["author"];
+        uint64_t newID = 0;
+        std::istringstream iss(cachedata[section]["id"]);
+        iss >> newID;
+        //RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Titles from cache: ", i, secs.size(), RenderD7::Color::Hex("#00DD11"));
+        newData->LoadFromCache(newID, title, __author__, nand ? MEDIATYPE_NAND : MEDIATYPE_SD);
+        t.push_back(newData);
+        zz++;
+    }
     
-    for(unsigned i = 0; i < secs.size(); i++)
+    
+    /*for(unsigned i = 0; i < secs.size(); i++)
     {
         auto newData = std::make_shared<Title>();
 
@@ -107,7 +121,7 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string& path,
         RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Titles from cache: ", i, secs.size(), RenderD7::Color::Hex("#00DD11"));
         newData->LoadFromCache(newID, title, __author__, nand ? MEDIATYPE_NAND : MEDIATYPE_SD);
         t.push_back(newData);
-    }
+    }*/
     for (size_t f = 0; f < t.size(); f++)
     {
         TitleManager::sdtitles.push_back(t[f]);
