@@ -32,12 +32,14 @@ static C2D_Image loadIconTex(u16* icndata){
 void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& path, int countall)
 {
     std::string path2 = path + ".count";
+    std::string path3 = path + ".buf";
     remove(path.c_str());
     remove(path2.c_str());
     INI::INIFile cache(path);
     INI::INIFile cachecount(path2);
     INI::INIStructure cachedata;
     INI::INIStructure cachedatacount;
+    
     cachedatacount["count"]["cnt"] = std::to_string(countall);
     for(unsigned i = 0; i < t.size(); i++)
     {
@@ -45,7 +47,6 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t, const std::string& pat
         cachedata[std::to_string(t[i]->ID())]["name"] = t[i]->name();
         cachedata[std::to_string(t[i]->ID())]["author"] = t[i]->author();
         cachedata[std::to_string(t[i]->ID())]["id"] = std::to_string(t[i]->ID());
-        
     }
     cache.write(cachedata);
     cachecount.write(cachedatacount);
