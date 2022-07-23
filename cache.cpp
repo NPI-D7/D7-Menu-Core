@@ -1,7 +1,7 @@
 #include "cache.hpp"
-#include "renderd7.hpp"
-#include "log.hpp"
-#include "ini.hpp"
+#include <rd7.hpp>
+#include <renderd7/log.hpp>
+#include <renderd7/ini.hpp>
 #include <iostream>
 #include <sstream>
 #include <cstdint>

@@ -1,7 +1,7 @@
 #include "title.hpp"
 #include "smdh.hpp"
 #include "utils.hpp"
-#include "log.hpp"
+#include <renderd7/log.hpp>
 
 std::string CardStatus = "NotInserted";
 std::string CardTypeStatus = "None";

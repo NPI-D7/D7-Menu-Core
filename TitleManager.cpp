@@ -1,8 +1,8 @@
 
 #include <array>
 #include "cache.hpp"
-#include "renderd7.hpp"
-#include "log.hpp"
+#include <rd7.hpp>
+#include <renderd7/log.hpp>
 
 extern Log cachelog;
 
