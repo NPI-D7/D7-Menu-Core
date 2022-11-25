@@ -63,7 +63,7 @@ static C2D_Image loadIconTex(smdh_s *smdh) {
   return C2D_Image{tex, &subt3x};
 }
 
-static C3D_Tex GetIcon(smdh_s *smdh) {
+/*static C3D_Tex GetIcon(smdh_s *smdh) {
   C3D_Tex icon;
   C3D_TexInit(&icon, 64, 64, GPU_RGB565);
   u16 *dest = (u16 *)icon.data + (64 - 48) * 64;
@@ -74,7 +74,7 @@ static C3D_Tex GetIcon(smdh_s *smdh) {
     dest += 64 * 8;
   }
   return icon;
-}
+}*/
 
 Title::~Title(void) {
   if (m_Card != CARD_TWL && m_Icon.tex) {
@@ -92,14 +92,14 @@ bool Title::LoadFromCache(const uint64_t &_id, std::string _title,
   cachelog.Write(std::to_string(m_id));
   cachelog.Write(m_Name + std::to_string((u32)(m_id)) +
                  std::to_string((u32)(m_id >> 32)));
-  if (loadicon) {
-    smdh_s *smdh = loadSMDH(lowid(), highid(), m_Media);
-    if (smdh == NULL) {
-      return false;
-    }
-    m_Icon = loadIconTex(smdh);
-    delete smdh;
-  }
+  //if (loadicon) {
+  //  smdh_s *smdh = loadSMDH(lowid(), highid(), m_Media);
+  //  if (smdh == NULL) {
+  //    return false;
+  //  }
+  //  m_Icon = loadIconTex(smdh);
+  //  delete smdh;
+  //}
 
   return true;
 }
@@ -126,9 +126,14 @@ bool Title::load(u64 id, FS_MediaType media) {
   if (loadicon)
     m_Icon = loadIconTex(smdh);
   // m_3Icon = GetIcon(smdh);
-  // ibuf = smdh->bigIconData;
+  ibuf = smdh->bigIconData;
   delete smdh;
   return titleload;
+}
+
+void Title::SetIcon(C2D_Image icn)
+{
+  m_Icon = icn;
 }
 
 u32 Title::highid(void) { return (u32)(m_id >> 32); }

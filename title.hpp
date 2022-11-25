@@ -20,6 +20,7 @@ public:
   bool LoadFromCache(const uint64_t &_id, std::string _title,
                      std::string _author, const uint8_t &mt);
   bool load(u64 id, FS_MediaType mediatype);
+  void SetIcon(C2D_Image icn);
   u32 highid(void);
   u32 lowid(void);
   u64 ID(void);
