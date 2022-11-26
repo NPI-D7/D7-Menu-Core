@@ -4,7 +4,6 @@
 #include <3ds.h>
 #include <string>
 
-
 typedef struct {
   u32 magic;
   u16 version;
