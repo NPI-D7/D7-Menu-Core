@@ -4,7 +4,6 @@
 #include <rd7.hpp>
 #include <renderd7/log.hpp>
 
-
 extern Log cachelog;
 
 static bool isValidId(u64 id) {

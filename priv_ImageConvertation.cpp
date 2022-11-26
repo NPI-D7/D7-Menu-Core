@@ -2,8 +2,9 @@
 #include <renderd7/Ovl.hpp>
 #include <renderd7/Toast.hpp>
 
-#include <renderd7/external/stb_image.h>
 #include <cache.hpp>
+#include <renderd7/external/stb_image.h>
+
 
 extern bool usedbgmsg;
 

@@ -41,28 +41,8 @@ std::string UTF16toUTF8(const std::u16string &src) {
 }
 
 void utf8_convert(char *buf, const u16 *input, size_t bufsize) {
-  ssize_t units = utf16_to_utf8((uint8_t *)buf, input, bufsize);
+  size_t units = utf16_to_utf8((uint8_t *)buf, input, bufsize);
   if (units < 0)
     units = 0;
   buf[units] = 0;
 }
-
-// std::string format(std::string fmt_str, ...)
-//{
-//	va_list ap;
-//	char* fp = NULL;
-//	va_start(ap, fmt_str);
-//	vasprintf(&fp, fmt_str.c_str(), ap);
-//	va_end(ap);
-//	std::unique_ptr<char, decltype(free)*> formatted(fp, free);
-//	return std::string(formatted.get());
-// }
-//
-// std::string timeStr(void)
-//{
-//	time_t unixTime       = time(NULL);
-//	struct tm* timeStruct = gmtime((const time_t*)&unixTime);
-//	return format("%02i:%02i:%02i", timeStruct->tm_hour,
-//timeStruct->tm_min);
-// }
-//

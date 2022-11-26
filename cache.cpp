@@ -86,7 +86,7 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t,
     }
     convertrgb565(&bitmap.data[0], smdh->bigIconData);
 
-    //bitmap.write(std::string(path5 + t[i]->name() + "z.bmp").c_str());
+    // bitmap.write(std::string(path5 + t[i]->name() + "z.bmp").c_str());
     maps.push_back(bitmap);
     delete smdh;
   }
@@ -156,8 +156,7 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string &path,
     uint64_t newID = 0;
     std::istringstream iss(cachedata[section]["id"]);
     iss >> newID;
-    // RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Titles from
-    // cache: ", i, secs.size(), RenderD7::Color::Hex("#00DD11"));
+
     newData->LoadFromCache(newID, title, __author__,
                            nand ? MEDIATYPE_NAND : MEDIATYPE_SD);
 
@@ -167,13 +166,14 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string &path,
       zrowh++;
       zrowv = 0;
     }
-    for (int i = 0; i < temp_.bmp_info_header.width+1; i++) {
-      for (int j = 0; j < temp_.bmp_info_header.height+1; j++) {
-        temp_.set_pixel(i, 48-j,
-                        UNPACK_BGRA(map_.get_pixel((zrowv * 48)+i, 1024-j-(zrowh*48))));
+    for (int i = 0; i < temp_.bmp_info_header.width + 1; i++) {
+      for (int j = 0; j < temp_.bmp_info_header.height + 1; j++) {
+        temp_.set_pixel(i, 48 - j,
+                        UNPACK_BGRA(map_.get_pixel((zrowv * 48) + i,
+                                                   1024 - j - (zrowh * 48))));
       }
     }
-    //temp_.write(std::string("sdmc:/D7-Menu/" + title + ".bmp").c_str());
+    // temp_.write(std::string("sdmc:/D7-Menu/" + title + ".bmp").c_str());
     zrowv++;
     C2D_Image img;
     NImage_to_C3D(&img, temp_.DATA());
@@ -182,23 +182,6 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string &path,
     zz++;
   }
 
-  /*for(unsigned i = 0; i < secs.size(); i++)
-  {
-      auto newData = std::make_shared<Title>();
-
-
-
-      std::string title = cachedata[secs[i]]["name"];
-
-      std::string __author__ = cachedata[secs[i]]["author"];
-      uint64_t newID = 0;
-      std::istringstream iss(cachedata[secs[i]]["id"]);
-      iss >> newID;
-      RenderD7::Msg::DisplayWithProgress("D7-Menu-Core",  "Loading Titles from
-  cache: ", i, secs.size(), RenderD7::Color::Hex("#00DD11"));
-      newData->LoadFromCache(newID, title, __author__, nand ? MEDIATYPE_NAND :
-  MEDIATYPE_SD); t.push_back(newData);
-  }*/
   for (size_t f = 0; f < t.size(); f++) {
     TitleManager::sdtitles.push_back(t[f]);
   }

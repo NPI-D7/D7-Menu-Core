@@ -29,7 +29,6 @@ public:
   std::string name(void);
   std::string author(void);
   C2D_Image icon(void);
-  C3D_Tex m_3Icon;
   u16 *ibuf;
 
 private:
