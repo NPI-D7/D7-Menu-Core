@@ -59,6 +59,7 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t,
   std::string path2 = path + ".count";
   std::string path3 = path + ".buf";
   std::string path4 = path + ".bmp";
+  std::string path5 = path;
   remove(path.c_str());
   remove(path2.c_str());
   INI::INIFile cache(path);
@@ -85,7 +86,7 @@ void Cache::Create(std::vector<std::shared_ptr<Title>> t,
     }
     convertrgb565(&bitmap.data[0], smdh->bigIconData);
 
-    // bitmap.write(std::string(t[i]->name() + ".bmp").c_str());
+    //bitmap.write(std::string(path5 + t[i]->name() + "z.bmp").c_str());
     maps.push_back(bitmap);
     delete smdh;
   }
@@ -166,13 +167,13 @@ bool Cache::Read(std::vector<std::shared_ptr<Title>> t, const std::string &path,
       zrowh++;
       zrowv = 0;
     }
-    for (int i = 0; i < temp_.bmp_info_header.width; i++) {
-      for (int j = 0; j < temp_.bmp_info_header.height; j++) {
+    for (int i = 0; i < temp_.bmp_info_header.width+1; i++) {
+      for (int j = 0; j < temp_.bmp_info_header.height+1; j++) {
         temp_.set_pixel(i, 48-j,
                         UNPACK_BGRA(map_.get_pixel((zrowv * 48)+i, 1024-j-(zrowh*48))));
       }
     }
-    temp_.write(std::string("sdmc:/D7-Menu/" + title + ".bmp").c_str());
+    //temp_.write(std::string("sdmc:/D7-Menu/" + title + ".bmp").c_str());
     zrowv++;
     C2D_Image img;
     NImage_to_C3D(&img, temp_.DATA());
