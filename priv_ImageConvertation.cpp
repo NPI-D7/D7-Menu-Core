@@ -5,7 +5,6 @@
 #include <cache.hpp>
 #include <renderd7/external/stb_image.h>
 
-
 extern bool usedbgmsg;
 
 static u32 GetNextPowerOf2(u32 v) {
