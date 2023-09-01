@@ -1,4 +1,5 @@
 #pragma once
+
 #include "smdh.hpp"
 
 #include <3ds.h>

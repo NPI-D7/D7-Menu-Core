@@ -1,11 +1,9 @@
-#include "title.hpp"
+#include "Title.hpp"
 #include "smdh.hpp"
 #include "utils.hpp"
-#include <renderd7/log.hpp>
 
 std::string CardStatus = "NotInserted";
 std::string CardTypeStatus = "None";
-extern Log cachelog;
 bool checked = false;
 FS_CardType type;
 bool loadicon = true;
@@ -44,51 +42,52 @@ void D7TM::CardLoop() {
   }
   if (checked) {
     checked = false;
-  } //__
+  }
 }
-static C2D_Image loadIconTex(smdh_s *smdh) {
+
+C2D_Image load_ibuf(uint16_t *icn) {
   C3D_Tex *tex = new C3D_Tex;
   static const Tex3DS_SubTexture subt3x = {48,         48,         0.0f,
                                            48 / 64.0f, 48 / 64.0f, 0.0f};
   C3D_TexInit(tex, 64, 64, GPU_RGB565);
+  memset(tex->data, 0, tex->size);
 
   u16 *dest = (u16 *)tex->data + (64 - 48) * 64;
-  u16 *src = (u16 *)smdh->bigIconData;
   for (int j = 0; j < 48; j += 8) {
-    std::copy(src, src + 48 * 8, dest);
-    src += 48 * 8;
+    std::copy(icn, icn + 48 * 8, dest);
+    icn += 48 * 8;
     dest += 64 * 8;
   }
 
   return C2D_Image{tex, &subt3x};
 }
 
+Title::Title(void) {
+  this->ibuf = new uint16_t[0x1600];
+  memset(this->ibuf, 0, 0x1600);
+}
+
 Title::~Title(void) {
   if (m_Card != CARD_TWL && m_Icon.tex) {
     C3D_TexDelete(m_Icon.tex);
   }
+  delete[] this->ibuf;
 }
 
 bool Title::LoadFromCache(const uint64_t &_id, std::string _title,
                           std::string _author, const uint8_t &mt) {
-  cachelog.Write("Loading Title: " + _id);
   m_id = _id;
   m_Media = (FS_MediaType)mt;
   m_Name = _title;
   m_Author = _author;
-  cachelog.Write(std::to_string(m_id));
-  cachelog.Write(m_Name + std::to_string((u32)(m_id)) +
-                 std::to_string((u32)(m_id >> 32)));
   return true;
 }
 
 bool Title::load(u64 id, FS_MediaType media) {
   bool titleload = false;
 
-  cachelog.Write("Loading Title: " + id);
   m_id = id;
   m_Media = media;
-  cachelog.Write(std::to_string(m_id));
   smdh_s *smdh = loadSMDH(lowid(), highid(), m_Media);
   if (smdh == NULL) {
     return false;
@@ -101,10 +100,10 @@ bool Title::load(u64 id, FS_MediaType media) {
 
   m_Author = UTF16toUTF8((char16_t *)smdh->applicationTitles[1].publisher);
   titleload = true;
+
+  memcpy(this->ibuf, smdh->bigIconData, 0x1600);
   if (loadicon)
-    m_Icon = loadIconTex(smdh);
-  // m_3Icon = GetIcon(smdh);
-  ibuf = smdh->bigIconData;
+    m_Icon = load_ibuf(this->ibuf);
   delete smdh;
   return titleload;
 }
@@ -118,8 +117,6 @@ u32 Title::lowid(void) { return (u32)m_id; }
 u64 Title::ID(void) { return (u64)highid() << 32 | lowid(); }
 
 FS_MediaType Title::mediatype(void) { return m_Media; }
-
-// Get the Icon from the SMDH.
 
 C2D_Image Title::icon(void) { return m_Icon; }
 

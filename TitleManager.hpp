@@ -1,5 +1,6 @@
 #pragma once
-#include "title.hpp"
+
+#include "Title.hpp"
 #include <3ds.h>
 #include <memory>
 #include <vector>

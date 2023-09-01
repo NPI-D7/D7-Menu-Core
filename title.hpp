@@ -14,7 +14,7 @@ void IconLoading(bool do_);
 
 class Title {
 public:
-  Title(void) = default;
+  Title(void);
   ~Title(void);
 
   bool LoadFromCache(const uint64_t &_id, std::string _title,

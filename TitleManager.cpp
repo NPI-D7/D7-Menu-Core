@@ -1,10 +1,6 @@
-
 #include "cache.hpp"
 #include <array>
-#include <rd7.hpp>
-#include <renderd7/log.hpp>
-
-extern Log cachelog;
+#include <string>
 
 static bool isValidId(u64 id) {
   // check for invalid titles.
@@ -74,15 +70,11 @@ void TitleManager::ScanSD(const std::string &appmaindir) {
           sdtitles.push_back(title);
         }
       }
-      RenderD7::Msg::DisplayWithProgress(
-          "D7-Menu-Core", "Scanning SDCard...", (int)TitleManager::currenttitle,
-          (int)TitleManager::titlecount, RenderD7::Color::Hex("#00DD11"));
     }
     std::sort(sdtitles.begin(), sdtitles.end(),
               [](std::shared_ptr<Title> &l, std::shared_ptr<Title> &r) {
                 return l->name() < r->name();
               });
-    RenderD7::Msg::Display("D7-Menu-Core", "Creating cache", Top);
     Cache::Create(sdtitles, appmaindir + "cache/sd", (int)count);
   }
 }
@@ -158,15 +150,11 @@ void TitleManager::ScanNand(const std::string &appmaindir) {
           nandtitles.push_back(title);
         }
       }
-      RenderD7::Msg::DisplayWithProgress(
-          "D7-Menu-Core", "Scanning Nand...", (int)TitleManager::currenttitle,
-          (int)TitleManager::titlecount, RenderD7::Color::Hex("#00DD11"));
     }
     std::sort(nandtitles.begin(), nandtitles.end(),
               [](std::shared_ptr<Title> &l, std::shared_ptr<Title> &r) {
                 return l->name() < r->name();
               });
-    RenderD7::Msg::Display("D7-Menu-Core", "Creating cache", Top);
     Cache::Create(nandtitles, appmaindir + "cache/nand", (int)count);
   }
 }
