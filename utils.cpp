@@ -1,7 +1,7 @@
-#include "utils.hpp"
+#include <stdarg.h>
 
 #include <memory>
-#include <stdarg.h>
+#include <utils.hpp>
 
 std::u16string UTF8toUTF16(const char *src) {
   char16_t tmp[256] = {0};
@@ -41,7 +41,6 @@ std::string UTF16toUTF8(const std::u16string &src) {
 
 void utf8_convert(char *buf, const u16 *input, size_t bufsize) {
   size_t units = utf16_to_utf8((uint8_t *)buf, input, bufsize);
-  if (units < 0)
-    units = 0;
+  if (units < 0) units = 0;
   buf[units] = 0;
 }

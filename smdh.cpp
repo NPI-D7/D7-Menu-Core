@@ -1,6 +1,7 @@
-#include "smdh.hpp"
 #include <stdio.h>
 #include <string.h>
+
+#include <smdh.hpp>
 
 smdh_s *loadSMDH(u32 low, u32 high, u8 media) {
   Handle fileHandle;

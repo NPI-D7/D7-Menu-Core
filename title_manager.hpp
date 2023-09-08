@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Title.hpp"
 #include <3ds.h>
+
 #include <memory>
+#include <title.hpp>
 #include <vector>
+
+namespace D7MC {
 
 namespace TitleManager {
 void ScanSD(const std::string &appmaindir);
@@ -14,4 +17,5 @@ inline std::vector<std::shared_ptr<Title>> gamecard;
 inline std::vector<std::shared_ptr<Title>> nandtitles;
 inline int titlecount;
 inline int currenttitle;
-} // namespace TitleManager
+}  // namespace TitleManager
+}  // namespace D7MC

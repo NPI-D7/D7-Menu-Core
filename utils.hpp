@@ -1,8 +1,8 @@
 #pragma once
 
-#include "smdh.hpp"
-
 #include <3ds.h>
+
+#include <smdh.hpp>
 #include <string>
 
 std::u16string UTF8toUTF16(const char *src);

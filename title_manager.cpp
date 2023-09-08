@@ -1,31 +1,33 @@
-#include "cache.hpp"
 #include <array>
+#include <cache.hpp>
+#include <card_slot.hpp>
 #include <string>
+#include <title_manager.hpp>
 
 static bool isValidId(u64 id) {
   // check for invalid titles.
   switch ((u32)id) {
-  // Instruction Manual
-  case 0x00008602:
-  case 0x00009202:
-  case 0x00009B02:
-  case 0x0000A402:
-  case 0x0000AC02:
-  case 0x0000B402:
-  // Internet Browser
-  case 0x00008802:
-  case 0x00009402:
-  case 0x00009D02:
-  case 0x0000A602:
-  case 0x0000AE02:
-  case 0x0000B602:
-  case 0x20008802:
-  case 0x20009402:
-  case 0x20009D02:
-  case 0x2000AE02:
-  // Garbage
-  case 0x00021A00:
-    return false;
+    // Instruction Manual
+    case 0x00008602:
+    case 0x00009202:
+    case 0x00009B02:
+    case 0x0000A402:
+    case 0x0000AC02:
+    case 0x0000B402:
+    // Internet Browser
+    case 0x00008802:
+    case 0x00009402:
+    case 0x00009D02:
+    case 0x0000A602:
+    case 0x0000AE02:
+    case 0x0000B602:
+    case 0x20008802:
+    case 0x20009402:
+    case 0x20009D02:
+    case 0x2000AE02:
+    // Garbage
+    case 0x00021A00:
+      return false;
   }
 
   // Exclude Update Titles.
@@ -43,6 +45,7 @@ static bool isValidId(u64 id) {
   return true;
 }
 
+namespace D7MC {
 void TitleManager::ScanSD(const std::string &appmaindir) {
   amInit();
   Result res = 0;
@@ -91,11 +94,11 @@ void TitleManager::ScanCard(void) {
   if (R_FAILED(res)) {
     return;
   }
-  D7TM::CardLoop();
-  if (CardStatus == "NotInserted") {
+  CardSlot::Update();
+  if (CardSlot::Satus() == "NotInserted") {
     return;
   }
-  if (CardTypeStatus == "TWL") {
+  if (CardSlot::Type() == "TWL") {
     return;
   }
 
@@ -108,7 +111,6 @@ void TitleManager::ScanCard(void) {
   }
 
   for (u32 i = 0; i < count; i++) {
-
     auto title = std::make_shared<Title>();
     if (title->load(ids[i], MEDIATYPE_GAME_CARD)) {
       gamecard.push_back(title);
@@ -117,7 +119,7 @@ void TitleManager::ScanCard(void) {
   // sort the list alphabetically
   std::sort(gamecard.begin(), gamecard.end(),
             [](std::shared_ptr<Title> &l, std::shared_ptr<Title> &r) {
-              return l->ID() < r->ID();
+              return l->id() < r->id();
             });
   sdtitles.insert(sdtitles.begin(), gamecard[0]);
 }
@@ -146,7 +148,6 @@ void TitleManager::ScanNand(const std::string &appmaindir) {
       if (isValidId(ids[i])) {
         auto title = std::make_shared<Title>();
         if (title->load(ids[i], MEDIATYPE_NAND)) {
-
           nandtitles.push_back(title);
         }
       }
@@ -158,3 +159,4 @@ void TitleManager::ScanNand(const std::string &appmaindir) {
     Cache::Create(nandtitles, appmaindir + "cache/nand", (int)count);
   }
 }
+}  // namespace D7MC

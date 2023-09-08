@@ -1,8 +1,9 @@
 #pragma once
 
-#include "utils.hpp"
 #include <3ds.h>
+
 #include <string>
+#include <utils.hpp>
 
 typedef struct {
   u32 magic;

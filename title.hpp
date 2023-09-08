@@ -1,41 +1,41 @@
+#pragma once
+
 #include <3ds.h>
-#include <algorithm>
 #include <citro2d.h>
+
+#include <algorithm>
 #include <string>
 
-extern std::string CardStatus;
-extern std::string CardTypeStatus;
-
-namespace D7TM {
-bool checkCardSlot();
-void CardLoop();
-void IconLoading(bool do_);
-} // namespace D7TM
-
+namespace D7MC {
 class Title {
-public:
-  Title(void);
-  ~Title(void);
+ public:
+  Title();
+  ~Title();
 
-  bool LoadFromCache(const uint64_t &_id, std::string _title,
-                     std::string _author, const uint8_t &mt);
-  bool load(u64 id, FS_MediaType mediatype);
-  void SetIcon(C2D_Image icn);
-  u32 highid(void);
-  u32 lowid(void);
-  u64 ID(void);
-  FS_MediaType mediatype(void);
-  std::string MediaTP(void);
-  std::string name(void);
-  std::string author(void);
-  C2D_Image icon(void);
-  u16 *ibuf;
+  bool load_from_cache(const uint64_t& tid, const std::string& title,
+                       const std::string& author, const uint8_t& mt);
+  bool load(const u64& id, const FS_MediaType& mediatype);
+  void set_icon(const C2D_Image& icn);
+  u32 highid();
+  u32 lowid();
+  u64 id();
+  FS_MediaType mediatype();
+  std::string str_mediatype();
+  std::string name();
+  std::string author();
+  C2D_Image icon();
+  u16* get_iconbuffer();
+  void delete_icon_buffer();
+  static C2D_Image load_icon_buffer(u16* buf);
+  static bool IsValidName(const std::string& name);
 
-private:
-  u64 m_id;
-  FS_MediaType m_Media;
-  FS_CardType m_Card;
-  C2D_Image m_Icon;
-  std::string m_Name;
-  std::string m_Author;
+ private:
+  u64 m_tid;
+  FS_MediaType m_mediatype;
+  FS_CardType m_cardtype;
+  C2D_Image m_icon;
+  u16* icon_buffer = nullptr;
+  std::string m_name;
+  std::string m_author;
 };
+}  // namespace D7MC
