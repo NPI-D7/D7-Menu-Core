@@ -74,6 +74,7 @@ void TitleManager::ScanSD(const std::string &appmaindir) {
         }
       }
     }
+    amExit();
     std::sort(sdtitles.begin(), sdtitles.end(),
               [](std::shared_ptr<Title> &l, std::shared_ptr<Title> &r) {
                 return l->name() < r->name();
@@ -109,7 +110,7 @@ void TitleManager::ScanCard(void) {
   if (R_FAILED(res)) {
     return;
   }
-
+  amExit();
   for (u32 i = 0; i < count; i++) {
     auto title = std::make_shared<Title>();
     if (title->load(ids[i], MEDIATYPE_GAME_CARD)) {
@@ -152,6 +153,7 @@ void TitleManager::ScanNand(const std::string &appmaindir) {
         }
       }
     }
+    amExit();
     std::sort(nandtitles.begin(), nandtitles.end(),
               [](std::shared_ptr<Title> &l, std::shared_ptr<Title> &r) {
                 return l->name() < r->name();
