@@ -60,7 +60,7 @@ u32 Title::highid(void) { return (u32)(m_tid >> 32); }
 
 u32 Title::lowid(void) { return (u32)m_tid; }
 
-u64 Title::id(void) { return (u64)highid() << 32 | lowid(); }
+u64 Title::id(void) { return m_tid; }
 
 FS_MediaType Title::mediatype(void) { return m_mediatype; }
 
