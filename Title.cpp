@@ -10,10 +10,12 @@ Title::Title(void) {
 }
 
 Title::~Title(void) {
-  if (m_icon.tex != nullptr) {
-    C3D_TexDelete(m_icon.tex);
+  if (d7mc_load_icons) {
+    if (m_icon.tex != nullptr) {
+      C3D_TexDelete(m_icon.tex);
+    }
+    delete_icon_buffer();
   }
-  delete_icon_buffer();
 }
 
 bool Title::load_from_cache(const uint64_t &tid, const std::string &title,

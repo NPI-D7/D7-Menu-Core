@@ -47,11 +47,11 @@ static bool isValidId(u64 id) {
 
 namespace D7MC {
 void TitleManager::ScanSD(const std::string &appmaindir) {
-  amInit();
   Result res = 0;
   u32 count = 0;
   sdtitles.clear();
   if (!Cache::Read(TitleManager::sdtitles, appmaindir + "cache/sd", false)) {
+    amInit();
     res = AM_GetTitleCount(MEDIATYPE_SD, &count);
     if (R_FAILED(res)) {
       return;
@@ -126,11 +126,11 @@ void TitleManager::ScanCard(void) {
 }
 
 void TitleManager::ScanNand(const std::string &appmaindir) {
-  amInit();
   Result res = 0;
   u32 count = 0;
   nandtitles.clear();
   if (!Cache::Read(nandtitles, appmaindir + "cache/nand", true)) {
+    amInit();
     res = AM_GetTitleCount(MEDIATYPE_NAND, &count);
     if (R_FAILED(res)) {
       return;
